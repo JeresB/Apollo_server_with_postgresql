@@ -281,8 +281,8 @@ UserAccountModel.hasOne(UserLoginModel, { as: 'UserLogin', foreignKey: 'user_id'
 UserLoginModel.belongsTo(UserAccountModel, { as: 'UserAccount', foreignKey: 'user_id' });
 
 // One user account --- one gourmet
-UserAccountModel.hasOne(GourmetModel, { foreignKey: 'user_id' });
-GourmetModel.belongsTo(UserAccountModel, { foreignKey: 'user_id' });
+UserAccountModel.hasOne(GourmetModel, { foreignKey: 'gourmet_id' });
+GourmetModel.belongsTo(UserAccountModel, { foreignKey: 'gourmet_id' });
 
 // A cook is also a gourmet
 CookModel.belongsTo(GourmetModel, { foreignKey: 'cook_id' });

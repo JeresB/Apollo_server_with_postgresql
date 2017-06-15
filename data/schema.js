@@ -21,7 +21,7 @@ const typeDefinitions = `
     lockout_end: Date
     lockout_enabled: Boolean
     access_failed_count: Int
-    # gourmet: Gourmet
+    gourmet: Gourmet
     login: UserLogin
   }
   type kitchen {
@@ -43,7 +43,7 @@ const typeDefinitions = `
     longitude: Float
     latitude: Float
     description: String
-    # user_account: UserAccount
+    user_account: UserAccount
     # cook: Cook
   }
   type Cook {
@@ -84,15 +84,13 @@ const typeDefinitions = `
 # Query definition
 # ----------------
   type Query {
-    UserAccount(user_id: ID, email: String): [UserAccount]
-    kitchen(kitchen_id: ID, name: String): kitchen
-    allKitchen(kitchen_id: ID, name: String): [kitchen]
-    gourmet(gourmet_id: ID, first_name: String): Gourmet
-    cook(cook_id: ID, description: String): Cook
-    reservation(gourmet_id: ID, workshop_id: ID, amount: Int): Reservation
-    userLogin(name: String, key: String, user_id: ID): UserLogin
-    workshop(workshop_id: ID, name: String, price: Int): Workshop
-    # exampleUUID(uuid: UUID): UUID
+    userAccount(user_id: ID, email: String): [UserAccount]
+    kitchen(kitchen_id: ID, name: String): [kitchen]
+    gourmet(gourmet_id: ID, first_name: String): [Gourmet]
+    cook(cook_id: ID, description: String): [Cook]
+    reservation(gourmet_id: ID, workshop_id: ID, amount: Int): [Reservation]
+    userLogin(name: String, key: String, user_id: ID): [UserLogin]
+    workshop(workshop_id: ID, name: String, price: Int): [Workshop]
   }
 
 # -------------------
@@ -127,10 +125,7 @@ const typeDefinitions = `
       longitude: Float,
       latitude: Float
     ): kitchen
-    deleteKitchenAndWorkshopAssociated(
-      kitchen_id: ID!,
-      name: String
-    ): kitchen
+    deleteKitchenAndWorkshopAssociated( kitchen_id: ID!, name: String ): kitchen
   }
 
 # -----------------
