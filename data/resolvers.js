@@ -1,7 +1,12 @@
+/*
+ * \file resolvers.js
+ * \brief Use to interact with the database through Apollo
+ * \date 16 juin 2017
+ * \author Cuistot du coin
+ */
+
+// Import of dependency
 import GraphQLToolsTypes from "graphql-tools-types"
-import { GraphQLScalarType } from 'graphql';
-import { Kind } from 'graphql/language';
-const uuidV4 = require('uuid/v4');
 import {
   Kitchen,
   UserAccount,
@@ -10,17 +15,20 @@ import {
   Reservation,
   UserLogin,
   Workshop
-} from './connectors';
+} from './models';
+//!
 
-
+// RESOLVERS APOLLO
 const resolvers = {
   // Resolvers function for custom types
-  UUID: GraphQLToolsTypes.UUID({ name: "MyUUID" }),
   Date: GraphQLToolsTypes.Date({ name: "MyDate" }),
   JSON: GraphQLToolsTypes.JSON({ name: "MyJSON" }),
   //!
 
+
+  // ---------------------------------------------------------- //
   // Query resolvers function definition
+  // ---------------------------------------------------------- //
   Query: {
     userAccount(_, args) {
       return UserAccount.findAndCountAll(/*{attributes: [ 'email' ]},*/{ where: args }
@@ -87,6 +95,14 @@ const resolvers = {
       });
     },
   },
+  //! --------------------------------------------------------- //
+  //! --------------------------------------------------------- //
+  //! --------------------------------------------------------- //
+
+
+  // ---------------------------------------------------------- //
+  // For Imbricated queries
+  // ---------------------------------------------------------- //
   UserAccount: {
     gourmet(user_account) {
       return user_account.getGourmet();
@@ -104,14 +120,62 @@ const resolvers = {
     user_account(gourmet) {
       return gourmet.getUserAccount();
     },
+    cook(gourmet) {
+      return gourmet.getCook();
+    },
+    reservation(gourmet) {
+      return gourmet.getReservation();
+    },
   },
+  Cook: {
+    gourmet(cook) {
+      return cook.getGourmet();
+    },
+    workshop(cook) {
+      return cook.getWorkshop();
+    },
+  },
+  Kitchen: {
+    workshop(kitchen) {
+      return kitchen.getWorkshop();
+    },
+  },
+  Workshop: {
+    kitchen(workshop) {
+      return workshop.getKitchen();
+    },
+    cook(workshop) {
+      return workshop.getCook();
+    },
+    reservation(workshop) {
+      return workshop.getReservation();
+    },
+  },
+  Reservation: {
+    gourmet(reservation) {
+      return reservation.getGourmet();
+    },
+    workshop(reservation) {
+      return reservation.getWorkshop();
+    },
+  },
+  //! --------------------------------------------------------- //
+  //! --------------------------------------------------------- //
+  //! --------------------------------------------------------- //
+
+
+  // ---------------------------------------------------------- //
   // Mutation resolvers function definition
+  // ---------------------------------------------------------- //
   Mutation: {
     addKitchen(_, args) {
       return Kitchen.create(args);
     },
     addUser(_, args) {
       return UserAccount.create(args);
+    },
+    addGourmet(_, args) {
+      return Gourmet.create(args);
     },
     updateKitchen(obj, args) {
       Kitchen.update(args,
@@ -121,7 +185,11 @@ const resolvers = {
       Workshop.destroy({ where: { kitchen_id: args.kitchen_id }});
       return Kitchen.destroy({ where: args });
     }
-  },
+  }
+  //! --------------------------------------------------------- //
+  //! --------------------------------------------------------- //
+  //! --------------------------------------------------------- //
 };
 
+// Resolvers of apollo server export
 export default resolvers;
