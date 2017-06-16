@@ -114,46 +114,50 @@ const typeDefinitions = `
 # Mutation definition
 # -------------------
   type Mutation {
-    addKitchen(
-      name: String,
-      city: String,
-      cp: String,
-      longitude: Float,
-      latitude: Float
-    ): Kitchen
-    addUser(
-      email: String,
-      email_confirmed: Boolean,
-      password_hash: String,
-      security_stamp: String,
-      concurrency_stamp: ID,
-      phone_number: String,
-      phone_number_confirmed: Boolean,
-      two_factor_enabled: Boolean,
-      lockout_end: Date,
-      lockout_enabled: Boolean,
+    addUserAccount(
+      email: String!, email_confirmed: Boolean, password_hash: String, security_stamp: String,
+      concurrency_stamp: ID, phone_number: String, phone_number_confirmed: Boolean,
+      two_factor_enabled: Boolean, lockout_end: Date, lockout_enabled: Boolean,
       access_failed_count: Int,
     ): UserAccount
+    addUserLogin( name: String!, key: String, user_id: ID! ): UserLogin
     addGourmet(
-      gourmet_id: ID,
-      first_name: String,
-      last_name: String,
-      picture: JSON,
-      gender: String,
-      city: String,
-      cp: String,
-      longitude: Float,
-      latitude: Float,
-      description: String
+      gourmet_id: ID!, first_name: String, last_name: String, picture: JSON, gender: String,
+      city: String, cp: String, longitude: Float, latitude: Float, description: String
     ): Gourmet
-    updateKitchen(
-      kitchen_id: ID!,
-      name: String,
-      city: String,
-      cp: String,
-      longitude: Float,
-      latitude: Float
+    addCook(cook_id: ID!, is_pro: Boolean, description: String): Cook
+    addKitchen(
+      name: String!, city: String!, cp: String, longitude: Float, latitude: Float
     ): Kitchen
+    addWorkshop(
+      workshop_id: ID, name: String!, price: Int!, duration: Int!, min_gourmet: Int!,
+      max_gourmet: Int!, description: String!, pictures: JSON, kitchen_id: ID,
+      cook_id: ID, workshop_date: Date!
+    ): Workshop
+    addReservation( gourmet_id: ID!, workshop_id: ID!, amount: Int! ): Reservation
+
+    updateUserAccount(
+      user_id: ID!, email: String, email_confirmed: Boolean, password_hash: String,
+      security_stamp: String, concurrency_stamp: ID, phone_number: String,
+      phone_number_confirmed: Boolean, two_factor_enabled: Boolean, lockout_end: Date,
+      lockout_enabled: Boolean, access_failed_count: Int,
+    ): UserAccount
+    updateUserLogin( name: String, key: String, user_id: ID! ): UserLogin
+    updateGourmet(
+      gourmet_id: ID!, first_name: String, last_name: String, picture: JSON, gender: String,
+      city: String, cp: String, longitude: Float, latitude: Float, description: String
+    ): Gourmet
+    updateCook(cook_id: ID!, is_pro: Boolean, description: String): Cook
+    updateKitchen(
+      kitchen_id: ID!, name: String, city: String, cp: String, longitude: Float,
+      latitude: Float): Kitchen
+    updateWorkshop(
+      workshop_id: ID!, name: String, price: Int, duration: Int, min_gourmet: Int,
+      max_gourmet: Int, description: String, pictures: JSON, kitchen_id: ID,
+      cook_id: ID, workshop_date: Date
+    ): Workshop
+    updateReservation( gourmet_id: ID!, workshop_id: ID!, amount: Int ): Reservation
+    
     deleteKitchenAndWorkshopAssociated( kitchen_id: ID!, name: String ): Kitchen
   }
 

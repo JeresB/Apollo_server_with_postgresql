@@ -259,7 +259,7 @@ const WorkshopModel = db.define('workshop', {
   },
   workshop_date: {
     type: Sequelize.DATEONLY,
-    allowNull: false
+    allowNull: false,
   }
 },
 {

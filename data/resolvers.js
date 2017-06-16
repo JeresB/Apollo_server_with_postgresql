@@ -168,19 +168,61 @@ const resolvers = {
   // Mutation resolvers function definition
   // ---------------------------------------------------------- //
   Mutation: {
-    addKitchen(_, args) {
-      return Kitchen.create(args);
+    addUserAccount  (_, args) { return UserAccount.create(args);  },
+    addUserLogin    (_, args) { return UserLogin.create(args);    },
+    addGourmet      (_, args) { return Gourmet.create(args);      },
+    addCook         (_, args) { return Cook.create(args);         },
+    addKitchen      (_, args) { return Kitchen.create(args);      },
+    addWorkshop     (_, args) { return Workshop.create(args);     },
+    addReservation  (_, args) { return Reservation.create(args);  },
+
+    updateUserAccount(_, args) {
+      UserAccount.update(args, {
+        where: { user_id: args.user_id }
+      }).then(function(result) {
+        console.log("Update success !");
+        return true;
+      }).catch(function(error) {
+        console.log("Update failed : " + error);
+        return false;
+      });
     },
-    addUser(_, args) {
-      return UserAccount.create(args);
+    updateUserLogin(_, args) {
+      return UserLogin.update(args, {
+        where: { user_id: args.user_id }
+      });
     },
-    addGourmet(_, args) {
-      return Gourmet.create(args);
+    updateGourmet(_, args) {
+      return Gourmet.update(args, {
+        where: { gourmet_id: args.gourmet_id }
+      });
     },
-    updateKitchen(obj, args) {
-      Kitchen.update(args,
-        { where: { kitchen_id: args.kitchen_id }});
+    updateCook(_, args) {
+      return Cook.update(args, {
+        where: { cook_id: args.cook_id }
+      });
     },
+    updateKitchen(_, args) {
+      return Kitchen.update(args, {
+        where: { kitchen_id: args.kitchen_id }
+      });
+    },
+    updateWorkshop(_, args) {
+      return Workshop.update(args, {
+        where: { workshop_id: args.workshop_id }
+      });
+    },
+    updateReservation (_, args) {
+      return Reservation.update(args, {
+        where: {
+          gourmet_id: args.gourmet_id,
+          workshop_id: args.workshop_id
+        }
+      });
+    },
+
+
+
     deleteKitchenAndWorkshopAssociated(obj, args) {
       Workshop.destroy({ where: { kitchen_id: args.kitchen_id }});
       return Kitchen.destroy({ where: args });
